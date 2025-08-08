@@ -5,6 +5,7 @@ import { Product } from '@/types/Product'
 import { IndividualProduct } from './individualProduct'
 import { ListGridToggle } from './listGridToggle'
 import { motion } from 'framer-motion'
+import { SearchBar } from './searchBar'
 
 interface PaginationData {
   page: number
@@ -17,6 +18,8 @@ interface PaginationData {
 
 export function ProductGrid() {
   const [products, setProducts] = useState<Product[]>([])
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
+  const [searching, setSearching] = useState(false)
   const [pagination, setPagination] = useState<PaginationData>({
     page: 1,
     limit: 10,
@@ -58,11 +61,17 @@ export function ProductGrid() {
     <div>
       {/* Do your magic here */}
       <div className="flex flex-row justify-between bg-gray-200 p-4 mb-4 rounded-xl w-full">
-        <div className="flex-1 mr-4">search bar to be added here</div>
+        <div className="flex-1 mr-4">
+          <SearchBar
+            products={products}
+            setFilteredProducts={setFilteredProducts}
+            setSearching={setSearching}
+          />
+        </div>
         <ListGridToggle isGrid={isGrid} setIsGrid={setIsGrid} />
       </div>
       <div className={viewPortClass}>
-        {products.map((product, idx) => (
+        {filteredProducts.map((product, idx) => (
           <motion.div
             key={product.id}
             initial={{ opacity: 0, y: 20 }}
