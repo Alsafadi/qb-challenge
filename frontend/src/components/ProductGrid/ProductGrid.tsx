@@ -6,7 +6,7 @@ import { IndividualProduct } from './individualProduct'
 import { ListGridToggle } from './listGridToggle'
 import { motion } from 'framer-motion'
 import { SearchBar } from './searchBar'
-
+const GRID_STATE = 'challenge_isGRID'
 interface PaginationData {
   page: number
   limit: number
@@ -30,6 +30,7 @@ export function ProductGrid() {
   })
   const [loading, setLoading] = useState(true)
   const [isGrid, setIsGrid] = useState(true)
+
   const fetchProducts = async (page: number = 1, limit: number = 10) => {
     setLoading(true)
     try {
@@ -44,9 +45,23 @@ export function ProductGrid() {
     }
   }
 
+  function getLocalGridState() {
+    const storedIsGrid = localStorage.getItem(GRID_STATE)
+    return storedIsGrid ? storedIsGrid === 'true' : true
+  }
+  function setLocalGridState(isGrid: boolean) {
+    localStorage.setItem(GRID_STATE, isGrid.toString())
+  }
+
   useEffect(() => {
+    setIsGrid(getLocalGridState())
     fetchProducts()
   }, [])
+
+  // Store customer selection in local storage
+  useEffect(() => {
+    setLocalGridState(isGrid)
+  }, [isGrid])
 
   const viewPortClass = useMemo(() => {
     return (
