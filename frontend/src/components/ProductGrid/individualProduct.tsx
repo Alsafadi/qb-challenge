@@ -2,6 +2,7 @@
 import { Product } from '@/types/Product'
 import { Card, CardBody, CardFooter, Button, Image, Chip } from '@heroui/react'
 import { Icon } from '@iconify/react'
+import { AddToCartButton } from '../Product/AddToCartButton'
 
 export function IndividualProduct({
   product,
@@ -10,24 +11,9 @@ export function IndividualProduct({
   product: Product
   isGrid: boolean
 }) {
-  const addProductToCart = async ({ productId }: { productId: string }) => {
-    // Implement add to cart functionality
-    await fetch('/api/cart', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ productId }),
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error('Failed to add product to cart')
-      }
-    })
-  }
-
   return (
-    <div className="flex ">
-      <Card>
+    <div className="w-full">
+      <Card className={`${isGrid ? 'flex-col' : 'max-h-[300px]'}`}>
         <CardBody className="overflow-visible p-0">
           <div className={`flex ${isGrid ? 'flex-col' : 'flex-row'} gap-2`}>
             <Image
@@ -36,9 +22,14 @@ export function IndividualProduct({
               className={`w-full ${
                 isGrid ? 'rounded-b-none' : 'rounded-r-none'
               } object-cover`}
-              width={'100%'}
-              height={isGrid ? 150 : 300}
-              loading="lazy"
+              classNames={{
+                blurredImg: `w-full ${
+                  isGrid ? 'rounded-b-none' : 'rounded-r-none'
+                } object-cover`,
+              }}
+              width={isGrid ? '100%' : 300}
+              height={isGrid ? 250 : 300}
+              loading="eager"
             />
 
             <div className="p-8 w-full">
@@ -92,15 +83,7 @@ export function IndividualProduct({
         </CardBody>
         {isGrid && (
           <CardFooter className="justify-end">
-            <Button
-              color="primary"
-              variant="solid"
-              endContent={<Icon icon="lucide:shopping-cart" />}
-              onPress={() => addProductToCart({ productId: product.id })}
-              className="w-full"
-            >
-              Add to Cart
-            </Button>
+            <AddToCartButton productId={product.id} />
           </CardFooter>
         )}
       </Card>

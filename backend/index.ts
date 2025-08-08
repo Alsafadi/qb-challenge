@@ -1,5 +1,5 @@
-import express from 'express';
-import mysql from 'mysql2/promise';
+import express from "express";
+import mysql from "mysql2/promise";
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -8,34 +8,36 @@ app.use(express.json());
 
 // Database connection
 const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || 'password',
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "password",
   database: process.env.DB_NAME,
-  port: parseInt(process.env.DB_PORT || '3306')
+  port: parseInt(process.env.DB_PORT || "3306"),
 };
 
 // Create database connection pool
 const pool = mysql.createPool(dbConfig);
 
-app.get('/health', async (_, res) => {
+app.get("/health", async (_, res) => {
   try {
-    await pool.execute('SELECT 1+1')
-    res.json({ status: 'ok' });
+    await pool.execute("SELECT 1+1");
+    res.json({ status: "ok" });
   } catch (error) {
-    console.error('Database error:', error);
-    res.status(500).json({ status: 'error' });
+    console.error("Database error:", error);
+    res.status(500).json({ status: "error" });
   }
 });
 
-app.get('/products', async (req, res) => {
+app.get("/products", async (req, res) => {
   try {
     const page: number = parseFloat(req.query.page as string) || 1;
     const limit: number = parseFloat(req.query.limit as string) || 10;
     const offset = (page - 1) * limit;
 
     // Get total count for pagination metadata
-    const [countResult] = await pool.execute('SELECT COUNT(*) as total FROM products');
+    const [countResult] = await pool.execute(
+      "SELECT COUNT(*) as total FROM products"
+    );
     const total = (countResult as any)[0].total;
 
     // Get paginated products - use LIMIT with offset calculation
@@ -56,12 +58,34 @@ app.get('/products', async (req, res) => {
         total,
         totalPages,
         hasNextPage,
-        hasPrevPage
-      }
+        hasPrevPage,
+      },
     });
   } catch (error) {
-    console.error('Database error:', error);
-    res.status(500).json({ error: 'Failed to fetch products from database' });
+    console.error("Database error:", error);
+    res.status(500).json({ error: "Failed to fetch products from database" });
+  }
+});
+
+app.get("/product", async (req, res) => {
+  const productId = req.query.id;
+
+  try {
+    const [rows] = await pool.execute("SELECT * FROM products WHERE id = ?", [
+      productId,
+    ]);
+    const product = (rows as any)[0];
+
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    return res.json(product);
+  } catch (error) {
+    console.error("Database error:", error);
+    return res
+      .status(500)
+      .json({ error: "Failed to fetch product from database" });
   }
 });
 
