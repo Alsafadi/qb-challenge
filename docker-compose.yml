@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   frontend:
@@ -10,6 +10,7 @@ services:
     environment:
       - NEXT_PUBLIC_BACKEND_URL=http://localhost:3001
       - BACKEND_URL=http://backend:3001
+      - CHOKIDAR_USEPOLLING=true
     depends_on:
       - backend
     volumes:
@@ -58,4 +59,4 @@ volumes:
 
 networks:
   qb-network:
-    driver: bridge 
+    driver: bridge

@@ -20,10 +20,10 @@ export function ProductGrid() {
     total: 0,
     totalPages: 0,
     hasNextPage: false,
-    hasPrevPage: false
+    hasPrevPage: false,
   })
   const [loading, setLoading] = useState(true)
-  
+
   const fetchProducts = async (page: number = 1, limit: number = 10) => {
     setLoading(true)
     try {
@@ -37,7 +37,7 @@ export function ProductGrid() {
       setLoading(false)
     }
   }
-  
+
   useEffect(() => {
     fetchProducts()
   }, [])
