@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
 import localFont from 'next/font/local'
 import './globals.css'
+import { Providers } from './providers'
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -35,9 +36,11 @@ export default async function RootLayout(
         <Header />
 
         <div className="container mx-auto flex gap-8">
-          <main className="py-8 flex-1">
-            <div className="container mx-auto">{props.children}</div>
-          </main>
+          <Providers>
+            <main className="py-8 flex-1">
+              <div className="container mx-auto">{props.children}</div>
+            </main>
+          </Providers>
 
           <Instructions />
         </div>

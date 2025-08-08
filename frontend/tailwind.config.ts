@@ -1,25 +1,27 @@
-import type { Config } from "tailwindcss";
-import typography from "@tailwindcss/typography";
+import type { Config } from 'tailwindcss'
+import typography from '@tailwindcss/typography'
+const { heroui } = require('@heroui/react')
 
 export default {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/@heroui/react/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-        blurple: "#5754F9",
-        raspberry: "#F44599",
-        kiwi: "#20D287",
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
+        blurple: '#5754F9',
+        raspberry: '#F44599',
+        kiwi: '#20D287',
       },
       fontFamily: {
-        title: "var(--font-title)",
+        title: 'var(--font-title)',
       },
     },
   },
-  plugins: [typography],
-} satisfies Config;
+  plugins: [typography, heroui()],
+} satisfies Config
