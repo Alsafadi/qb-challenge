@@ -1,7 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Product } from '@/types/Product'
+import { IndividualProduct } from './individualProduct'
+import { ListGridToggle } from './listGridToggle'
 
 interface PaginationData {
   page: number
@@ -23,7 +25,7 @@ export function ProductGrid() {
     hasPrevPage: false,
   })
   const [loading, setLoading] = useState(true)
-
+  const [isGrid, setIsGrid] = useState(true)
   const fetchProducts = async (page: number = 1, limit: number = 10) => {
     setLoading(true)
     try {
@@ -42,15 +44,29 @@ export function ProductGrid() {
     fetchProducts()
   }, [])
 
+  const viewPortClass = useMemo(() => {
+    return (
+      // ensure only list view possible in mobile, even if user selected grid view
+      isGrid
+        ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 item-strech'
+        : 'flex flex-col gap-4'
+    )
+  }, [isGrid])
+
   return (
     <div>
       {/* Do your magic here */}
-      <div>
+      <div className="flex flex-row justify-between bg-gray-200 p-4 mb-4 rounded-xl w-full">
+        <div className="flex-1 mr-4">search bar to be added here</div>
+        <ListGridToggle isGrid={isGrid} setIsGrid={setIsGrid} />
+      </div>
+      <div className={viewPortClass}>
         {products.map((product) => (
-          <div key={product.id}>
-            <div>{product.name}</div>
-            <div>{product.price} kr</div>
-          </div>
+          <IndividualProduct
+            key={product.id}
+            product={product}
+            isGrid={isGrid}
+          />
         ))}
       </div>
 
