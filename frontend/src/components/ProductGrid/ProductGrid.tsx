@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Product } from '@/types/Product'
 import { IndividualProduct } from './individualProduct'
 import { ListGridToggle } from './listGridToggle'
+import { motion } from 'framer-motion'
 
 interface PaginationData {
   page: number
@@ -61,12 +62,23 @@ export function ProductGrid() {
         <ListGridToggle isGrid={isGrid} setIsGrid={setIsGrid} />
       </div>
       <div className={viewPortClass}>
-        {products.map((product) => (
-          <IndividualProduct
+        {products.map((product, idx) => (
+          <motion.div
             key={product.id}
-            product={product}
-            isGrid={isGrid}
-          />
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              delay: idx * 0.15,
+              duration: 0.4,
+            }}
+            className="h-full flex"
+          >
+            <IndividualProduct
+              key={product.id}
+              product={product}
+              isGrid={isGrid}
+            />
+          </motion.div>
         ))}
       </div>
 
