@@ -1,3 +1,4 @@
+'use client'
 import Logo from '@/components/Logo'
 import Link from 'next/link'
 import { Cart } from './Cart'

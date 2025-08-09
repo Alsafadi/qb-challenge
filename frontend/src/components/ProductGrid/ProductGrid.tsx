@@ -22,6 +22,7 @@ interface PaginationData {
 export function ProductGrid() {
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
+  const [cartItems, setCartItems] = useState<string[]>([])
   const [isGrid, setIsGrid] = useState(true)
   // changed limit to 12 as it works better with grids of 2 cols 3, 4 or 6
   const [pagination, setPagination] = useState<PaginationData>({
@@ -58,6 +59,12 @@ export function ProductGrid() {
     }
   }
 
+  async function getLocalCartItems() {
+    const response = await fetch('/api/cart')
+    const storedCartItems = await response.json()
+    setCartItems(storedCartItems.cart || [])
+  }
+
   function getLocalGridState() {
     const storedIsGrid = localStorage.getItem(GRID_STATE)
     return storedIsGrid ? storedIsGrid === 'true' : true
@@ -68,6 +75,8 @@ export function ProductGrid() {
 
   useEffect(() => {
     setIsGrid(getLocalGridState())
+    getLocalCartItems()
+
     fetchProducts()
   }, [])
 
@@ -126,9 +135,14 @@ export function ProductGrid() {
               delay: (idx - pagination.total) * 0.15,
               duration: 0.4,
             }}
-            className="h-full flex"
           >
-            <IndividualProduct product={product} isGrid={isGrid} />
+            <IndividualProduct
+              product={product}
+              isGrid={isGrid}
+              inCartAlready={Object.entries(cartItems)?.some(
+                ([item]) => item === product.id,
+              )}
+            />
           </motion.div>
         ))}
       </div>

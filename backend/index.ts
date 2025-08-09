@@ -67,6 +67,7 @@ app.get("/products", async (req, res) => {
   }
 });
 
+// get a single product by id
 app.get("/product", async (req, res) => {
   const productId = req.query.id;
 
@@ -86,6 +87,35 @@ app.get("/product", async (req, res) => {
     return res
       .status(500)
       .json({ error: "Failed to fetch product from database" });
+  }
+});
+
+// get product information using an array of ids
+app.get("/productinfo", async (req, res) => {
+  const idsParam = req.query.ids;
+  const productIds =
+    typeof idsParam === "string"
+      ? idsParam.split(",").map((id) => id.trim())
+      : [];
+
+  if (!Array.isArray(productIds)) {
+    return res.status(400).json({ error: "Invalid product IDs" });
+  }
+
+  console.log("Fetching product info for IDs:", productIds);
+  try {
+    const placeholders = productIds.map(() => "?").join(",");
+    const [rows] = await pool.execute(
+      `SELECT * FROM products WHERE id IN (${placeholders})`,
+      productIds
+    );
+
+    return res.json({ products: rows });
+  } catch (error) {
+    console.error("Database error:", error);
+    return res
+      .status(500)
+      .json({ error: "Failed to fetch products from database" });
   }
 });
 

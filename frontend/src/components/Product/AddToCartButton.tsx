@@ -1,31 +1,37 @@
 'use client'
 
+import { useCart } from '@/context/CartContext'
 import { addToast, Button } from '@heroui/react'
 import { Icon } from '@iconify/react'
+import { useState } from 'react'
 
 export function AddToCartButton({ productId }: { productId: string }) {
+  const [loading, setLoading] = useState(false)
+  const { addToCart, refreshCart } = useCart()
   const addProductToCart = async () => {
-    // Implement add to cart functionality
-    await fetch('/api/cart', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ productId }),
-    }).then((res) => {
-      if (!res.ok) {
-        addToast({
-          title: 'Error',
-          description: 'Failed to add product to cart',
-          color: 'danger',
-        })
-      }
+    setLoading(true)
+    try {
+      // Add to cart and wait for it to complete fully
+      await addToCart(productId)
+
+      // Force a refresh to ensure we have the latest data
+      await refreshCart()
+
       addToast({
-        title: 'Success',
-        description: 'Product added to cart',
+        title: 'Item added to cart',
+        description: 'The item has been successfully added to your cart.',
         color: 'success',
       })
-    })
+    } catch (error) {
+      console.error('Error adding product to cart:', error)
+      addToast({
+        title: 'Error adding to cart',
+        description: 'There was an error adding the item to your cart.',
+        color: 'danger',
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -35,6 +41,7 @@ export function AddToCartButton({ productId }: { productId: string }) {
       endContent={<Icon icon="lucide:shopping-cart" />}
       onPress={addProductToCart}
       className="w-full"
+      isLoading={loading}
     >
       Add to Cart
     </Button>
