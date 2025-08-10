@@ -10,12 +10,9 @@
     "resolveJsonModule": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "types": ["node"]
   },
-  "include": [
-    "*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
-} 
+  "include": ["*.ts", "src/**/*.ts"],
+  "exclude": ["node_modules"]
+}
