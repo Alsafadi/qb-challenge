@@ -111,9 +111,9 @@ export function ProductGrid() {
   }, [isGrid])
 
   return (
-    <div>
+    <div className="px-4">
+      {/* Changed to px-4 for better padding on smaller screens */}
       {/* Do your magic here */}
-
       <div className="flex flex-row justify-between bg-gray-200 p-4 mb-4 rounded-xl w-full">
         <div className="flex-1 mr-4">
           <SearchBar
@@ -124,7 +124,6 @@ export function ProductGrid() {
         </div>
         <ListGridToggle isGrid={isGrid} setIsGrid={setIsGrid} />
       </div>
-
       <div className={viewPortClass}>
         {filteredProducts.map((product, idx) => (
           <motion.div
@@ -155,7 +154,6 @@ export function ProductGrid() {
           />
         </div>
       )}
-
       {/* Pagination info */}
       {/* This below can be removed */}
       {products.length > 0 && (

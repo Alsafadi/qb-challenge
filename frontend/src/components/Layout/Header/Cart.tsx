@@ -23,7 +23,7 @@ export function Cart() {
   // Fetch product info whenever cart changes
   useEffect(() => {
     // Load product info for all items in the cart
-    console.log('cart init in cart.tsx')
+
     const fetchAllProducts = async () => {
       const ids = Object.keys(cart)
       const idsString = ids.join(',')
@@ -61,7 +61,8 @@ export function Cart() {
             <ShoppingBag />
           </span>
           <span>
-            <b>{numCartItems}</b> items in cart
+            <b>{numCartItems}</b>{' '}
+            <span className="hidden md:inline">items in cart</span>
           </span>
         </div>
       </Button>
@@ -76,7 +77,7 @@ export function Cart() {
                 Shopping Cart
               </ModalHeader>
               <ModalBody>
-                <ul className="space-y-2">
+                <ul className="space-y-2 overflow-y-auto max-h-[60vh]">
                   {cartProducts.map((product) => (
                     <li key={product.id}>
                       <div className="grid grid-cols-[1fr_auto] gap-3 items-center bg-foreground-100 p-2 rounded-xl px-4">
