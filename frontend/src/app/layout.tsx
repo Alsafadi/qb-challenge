@@ -1,4 +1,3 @@
-import { Instructions } from '@/components/Instructions'
 import { Header } from '@/components/Layout/Header/Header'
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
@@ -33,17 +32,15 @@ export default async function RootLayout(
         <link rel="icon" href="/favicon.svg" sizes="any" />
       </head>
       <body className={[manrope.className, futuraPT.variable].join(' ')}>
-        <Header />
+        <Providers>
+          <Header />
 
-        <div className="container mx-auto flex gap-8">
-          <Providers>
+          <div className="container mx-auto flex gap-8">
             <main className="py-8 flex-1">
               <div className="container mx-auto">{props.children}</div>
             </main>
-          </Providers>
-
-          <Instructions />
-        </div>
+          </div>
+        </Providers>
       </body>
     </html>
   )
