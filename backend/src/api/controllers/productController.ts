@@ -15,18 +15,6 @@ export const productController = {
     }
   },
 
-  async getProduct(req: Request, res: Response, next: NextFunction) {
-    try {
-      const id = req.query.id as string;
-
-      const product = await productService.getProductById(id);
-
-      res.json(product);
-    } catch (error) {
-      next(error);
-    }
-  },
-
   async getProductsInfo(req: Request, res: Response, next: NextFunction) {
     try {
       const ids = req.query.ids;

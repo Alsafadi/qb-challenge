@@ -1,6 +1,5 @@
 import { productRepository } from "../data/repositories/productRepository";
 import { Product, ProductsResponse } from "../data/models/product";
-import { NotFoundError } from "../utils/errorHandler";
 import { logger } from "../utils/logger";
 
 export const productService = {
@@ -26,19 +25,6 @@ export const productService = {
         hasPrevPage: page > 1,
       },
     };
-  },
-
-  // get Product by id. Implemented to be used in getting information per product
-  async getProductById(id: string): Promise<Product> {
-    logger.debug("Getting product by id", { productId: id });
-
-    const product = await productRepository.findById(id);
-
-    if (!product) {
-      throw new NotFoundError(`Product with id ${id} not found`);
-    }
-
-    return product;
   },
 
   // get information on a group of products to avoid too many api calls. This is to be used for getting information in items in cart

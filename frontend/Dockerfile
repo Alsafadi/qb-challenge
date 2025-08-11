@@ -8,7 +8,8 @@ COPY package.json ./
 # Install pnpm
 RUN npm install -g pnpm
 
-# Install dependencies
+# Install dependencies (add registry info to install heroui)
+RUN pnpm config set registry https://registry.npmjs.org/
 RUN pnpm install 
 
 # Copy source code
