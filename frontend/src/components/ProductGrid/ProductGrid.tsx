@@ -8,6 +8,7 @@ import { motion } from 'framer-motion'
 import { SearchBar } from './searchBar'
 import { SelectCategory } from './selectCategories'
 import Fuse from 'fuse.js'
+import { useCart } from '@/context/CartContext'
 
 // in a normal situation, I would dynamically set this based on routing.
 const GRID_STATE = 'challenge_isGRID'
@@ -22,6 +23,7 @@ interface PaginationData {
 }
 
 export function ProductGrid() {
+  const { cart } = useCart()
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
@@ -80,9 +82,13 @@ export function ProductGrid() {
   useEffect(() => {
     setIsGrid(getLocalGridState())
     getLocalCartItems()
-
     fetchProducts()
   }, [])
+
+  // update added to cart marks when cart is updated in useCart context:
+  useEffect(() => {
+    getLocalCartItems()
+  }, [cart])
 
   // Store customer selection in local storage
   useEffect(() => {
