@@ -6,6 +6,8 @@ import { Spinner } from '@heroui/react'
 import { ListGridToggle } from './listGridToggle'
 import { motion } from 'framer-motion'
 import { SearchBar } from './searchBar'
+import { SelectCategory } from './selectCategories'
+import Fuse from 'fuse.js'
 
 // in a normal situation, I would dynamically set this based on routing.
 const GRID_STATE = 'challenge_isGRID'
@@ -22,6 +24,7 @@ interface PaginationData {
 export function ProductGrid() {
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [cartItems, setCartItems] = useState<string[]>([])
   const [isGrid, setIsGrid] = useState(true)
   // changed limit to 12 as it works better with grids of 2 cols 3, 4 or 6
@@ -34,6 +37,7 @@ export function ProductGrid() {
     hasPrevPage: false,
   })
   const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState<string>('')
   const [searching, setSearching] = useState(false)
 
   // Fetch products from the API
@@ -85,6 +89,32 @@ export function ProductGrid() {
     setLocalGridState(isGrid)
   }, [isGrid])
 
+  // handle search and category selection:
+  const fuse = new Fuse(products, {
+    keys: ['name', 'description'],
+    threshold: 0.3,
+  })
+
+  useEffect(() => {
+    console.log('Selected Categories:', selectedCategories)
+    const filtered =
+      selectedCategories.length > 0
+        ? products.filter((product) =>
+            selectedCategories.includes(product.category),
+          )
+        : products
+
+    if (searchTerm.trim() === '') {
+      setFilteredProducts(filtered)
+      setSearching(false)
+      return
+    }
+    setSearching(true)
+    fuse.setCollection(filtered)
+    const results = fuse.search(searchTerm).map((result) => result.item)
+    setFilteredProducts(results)
+  }, [searchTerm, products, selectedCategories])
+
   // simpliest way to handle scroll
   useEffect(() => {
     const handleScroll = () => {
@@ -114,12 +144,14 @@ export function ProductGrid() {
     <div className="px-4">
       {/* Changed to px-4 for better padding on smaller screens */}
       {/* Do your magic here */}
-      <div className="flex flex-row justify-between bg-gray-200 p-4 mb-4 rounded-xl w-full">
-        <div className="flex-1 mr-4">
-          <SearchBar
-            products={products}
-            setFilteredProducts={setFilteredProducts}
-            setSearching={setSearching}
+      <div className="flex flex-row max-md:flex-col gap-2 justify-between items-center bg-gray-200 p-4 mb-4 rounded-xl w-full">
+        <div className="w-full">
+          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        </div>
+        <div className="w-full">
+          <SelectCategory
+            selectedCategories={selectedCategories}
+            setSelectedCategories={setSelectedCategories}
           />
         </div>
         <ListGridToggle isGrid={isGrid} setIsGrid={setIsGrid} />
