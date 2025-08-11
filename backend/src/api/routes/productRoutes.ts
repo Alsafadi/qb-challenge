@@ -18,3 +18,5 @@ productRoutes.get(
   validateProductIds,
   productController.getProductsInfo
 );
+
+productRoutes.get("/categories", productController.getCategories);

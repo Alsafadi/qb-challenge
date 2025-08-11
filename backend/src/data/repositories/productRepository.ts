@@ -57,4 +57,18 @@ export const productRepository = {
       throw new DatabaseError("Failed to fetch products from database");
     }
   },
+
+  async findCategories(): Promise<string[]> {
+    try {
+      const [rows] = await pool.execute(
+        "SELECT DISTINCT category FROM products"
+      );
+      return (rows as any).map((row: { category: string }) => row.category);
+    } catch (error) {
+      logger.error("Error finding product categories", { error });
+      throw new DatabaseError(
+        "Failed to fetch product categories from database"
+      );
+    }
+  },
 };

@@ -33,4 +33,12 @@ export const productService = {
 
     return await productRepository.findByIds(ids);
   },
+
+  // Get all product categories to allow filtering by category.
+  // IMPORTANT: caching can be implmented as well for faster access. Not done yet.
+  async getCategories(): Promise<string[]> {
+    logger.debug("Getting product categories");
+
+    return await productRepository.findCategories();
+  },
 };

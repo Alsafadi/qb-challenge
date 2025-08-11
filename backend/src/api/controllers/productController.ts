@@ -33,4 +33,13 @@ export const productController = {
       next(error);
     }
   },
+
+  async getCategories(req: Request, res: Response, next: NextFunction) {
+    try {
+      const categories = await productService.getCategories();
+      res.json({ categories });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
