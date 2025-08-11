@@ -29,10 +29,10 @@ export const validateProductId = (
   _res: Response,
   next: NextFunction
 ) => {
-  const id = req.query.id as string;
+  const ids = req.query.ids as string;
 
-  if (!id || typeof id !== "string" || id.trim() === "") {
-    return next(new BadRequestError("Product ID is required"));
+  if (!ids || typeof ids !== "string" || ids.trim() === "") {
+    return next(new BadRequestError("Product IDDs are required"));
   }
 
   next();
@@ -56,8 +56,6 @@ export const validateProductIds = (
       new BadRequestError("At least one valid product ID is required")
     );
   }
-
-  req.query.productIds = ids;
 
   next();
 };

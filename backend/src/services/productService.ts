@@ -44,6 +44,7 @@ export const productService = {
   // get information on a group of products to avoid too many api calls. This is to be used for getting information in items in cart
   async getProductsByIds(ids: string[]): Promise<Product[]> {
     logger.debug("Getting products by ids", { productIds: ids });
+
     return await productRepository.findByIds(ids);
   },
 };

@@ -29,8 +29,15 @@ export const productController = {
 
   async getProductsInfo(req: Request, res: Response, next: NextFunction) {
     try {
-      const productIds = req.query.productIds as string[];
-
+      const ids = req.query.ids;
+      if (!ids || typeof ids !== "string") {
+        res
+          .status(400)
+          .json({ error: "Missing or invalid 'ids' query parameter" });
+        return;
+      }
+      const splitIds = ids.split(",").filter((id) => id.trim() !== "");
+      const productIds = splitIds as string[];
       const products = await productService.getProductsByIds(productIds);
 
       res.json({ products });
