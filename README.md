@@ -4,6 +4,12 @@ My submission for the QB code challenge.
 
 _Clone the repo and run `docker-compose up --build`_
 
+**Access the application**:
+
+- Frontend: [http://localhost:3000](http://localhost:3000)
+- Backend API: [http://localhost:3001](http://localhost:3001)
+- MySQL Database: localhost:3306
+
 ## 📋 Updated State after Challenge completion:
 
 ### Backend (`/backend`)
