@@ -6,11 +6,7 @@ WORKDIR /app
 COPY package.json ./
 
 # Install pnpm
-RUN npm install -g pnpm
-
-# Install dependencies (add registry info to install heroui)
-RUN pnpm config set registry https://registry.npmjs.org/
-RUN pnpm install 
+RUN npm install 
 
 # Copy source code
 COPY . .
@@ -19,4 +15,4 @@ COPY . .
 EXPOSE 3000
 
 # Start development server
-CMD ["pnpm", "dev"] 
+CMD ["npm", "run", "dev"] 
